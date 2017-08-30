@@ -1,0 +1,43 @@
+<h1>Login</h1>
+
+<div *ngIf="!kickstarter.connected">
+	<form (ngSubmit)="kickstarterLogin(kickstarter.email, kickstarter.password)" name="kickstarter">
+
+		<h3>Kickstarter</h3>
+
+		<input [(ngModel)]="kickstarter.email" placeholder="Email" autofocus name="kick_email">
+		<input [(ngModel)]="kickstarter.password" placeholder="Password" type= "password" name="kick_password">
+
+		<label for="kick_remember">Remember kickstarter credentials</label>
+		<input [(ngModel)]="kickstarter.remember" type="checkbox" name="kick_remember">
+
+		<input value="Submit Value" type="submit">
+
+	</form>
+</div>
+<div *ngIf="kickstarter.connected">
+	<h3>Connected to Kickstarter</h3>
+	<button (click)="logout('kickstarter')">Logout</button>
+</div>
+
+<div *ngIf="!indiegogo.connected">
+	<form (ngSubmit)="indiegogoLogin(indiegogo.email, indiegogo.password)" name="indiegogo">
+
+		<h3>Indiegogo</h3>
+
+		<input [(ngModel)]="indiegogo.email" placeholder="Email" autofocus name="indie_email">
+		<input [(ngModel)]="indiegogo.password" placeholder="Password" type= "password" name="indie_password">
+
+		<label for="kick_remember">Remember indiegogo credentials</label>
+		<input [(ngModel)]="indiegogo.remember" type= "checkbox" name="kick_remember">
+
+		<input value="Submit Value" type="submit">
+
+	</form>
+</div>
+<div *ngIf="indiegogo.connected">
+	<h3>Connected to Indiegogo</h3>
+	<button (click)="logout('indiegogo')">Logout</button>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
