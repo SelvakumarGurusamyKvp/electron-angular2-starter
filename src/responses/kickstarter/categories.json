@@ -1,0 +1,8 @@
+{
+    "urls": {
+        "api": {
+            "newer_activities": "https://api.kickstarter.com/v1/activities?categories[]=backing&categories[]=cancellation&categories[]=failure&categories[]=follow&categories[]=launch&categories[]=success&categories[]=update&count=1&signature=1504301384.42529d0c3225defa101fed54e45f9fedd442b759&since=1504214984"
+        }
+    },
+    "activities": []
+}
