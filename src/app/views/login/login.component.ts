@@ -1,16 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+// import { Router } from '@angular/router';
 
 import { KickstarterService } from '../../services/kickstarter.service';
-import { HardwareClubService } from '../../services/hardwareclub.service';
-import { IndiegogoService } from '../../services/indiegogo.service';
 import { StorageService } from '../../services/storage.service';
 
 import { Credential } from '../../class/credential';
 
 @Component({
   selector: 'login',
-  providers: [KickstarterService, StorageService, HardwareClubService, IndiegogoService],
+  providers: [KickstarterService, StorageService],
   styleUrls: [ './login.component.scss' ],
   templateUrl: './login.component.html'
 })
@@ -29,19 +27,10 @@ export class LoginComponent implements OnInit {
     remember: true,
     connected: false
   };
-  public hardwareclub = {
-    email: '',
-    password: '',
-    remember: true,
-    connected: false
-  };
 
   constructor(
     public kickstarterService: KickstarterService,
-    public hardwareclubService: HardwareClubService,
-    public indiegogoService: IndiegogoService,
-    private storageService: StorageService,
-    public router: Router) {
+    private storageService: StorageService) {
     this.loadCredential();
   }
 
@@ -52,15 +41,14 @@ export class LoginComponent implements OnInit {
   // ————— KICKSTARTER —————
   // Login
   public kickstarterLogin(email: string, password: string) {
-    this.kickstarterService.signin(email, password).then((res) => {
+   this.kickstarterService.signin(email, password).then((res) => {
       let credential = new Credential(
         res.user.id,
         res.user.name,
         this.kickstarter.email,
         this.kickstarter.password,
         res.user.avatar.large,
-        res.access_token,
-        '');
+        res.access_token);
       this.kickstarter.connected = true;
       if (this.kickstarter.remember) {
         this.saveCredential('kickstarter', credential);
@@ -73,70 +61,38 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  // ————— INDIEGOGO —————
+  // ————— KICKSTARTER —————
   // login
   public indiegogoLogin(email: string, password: string) {
-    this.indiegogoService.signin(email, password).then((authRes) => {
-      const token = authRes.access_token;
-      this.indiegogoService.userInfos(token).then((res) => {
-        let credential = new Credential(
-          res.response.id,
-          res.response.name,
-          this.indiegogo.email,
-          this.indiegogo.password,
-          res.response.avatar_url,
-          token,
-          authRes.refresh_token);
-        this.indiegogo.connected = true;
-        if (this.indiegogo.remember) {
-          this.saveCredential('indiegogo', credential);
-        } else {
-          this.saveCredential('indiegogo', null);
-        }
-        this.checkLogin();
-      }).catch((error) => {
-        console.log('Error: ', error.message);
-      });
-    }).catch((error) => {
-      console.log('Error: ', error.message);
-    });
-  }
-
-  // ————— HARDAWRECLUB —————
-  // Login
-  public hardwareclubLogin(email: string, password: string) {
-    this.hardwareclubService.signin(email, password).then((res) => {
-      let credential = new Credential(
-        res.data.user.id,
-        res.data.user.name,
-        this.hardwareclub.email,
-        this.hardwareclub.password,
-        'https://hardwareclub.imgix.net' + res.data.user.image.source.replace('images', ''),
-        res.data.access_token,
-        res.data.refresh_token);
-      this.hardwareclub.connected = true;
-      if (this.hardwareclub.remember) {
-        this.saveCredential('hardwareclub', credential);
-      } else {
-        this.saveCredential('hardwareclub', null);
-      }
-      this.checkLogin();
-    }).catch((error) => {
-      console.log('Error: ', error.message);
-    });
+   // this.indiegogoService.signin(email, password).then((res) => {
+   //    console.log(res);
+   //    let credential = new Credential(
+   //      res.user.id,
+   //      res.user.name,
+   //      this.indiegogo.email,
+   //      this.indiegogo.password,
+   //      res.user.avatar.large,
+   //      res.access_token);
+   //    if (this.indiegogo.remember) {
+   //      this.saveCredential('indiegogo', credential);
+   //    } else {
+   //      this.saveCredential('indiegogo', {});
+   //    }
+   //    this.indiegogo.connected = true;
+   //    this.checkLogin();
+   //  }).catch((error) => {
+   //    console.log('Error: ', error.message);
+   //  });
   }
 
   /* Double login checking
    * @var platform : string = Name of the platform you wish to be disconnected from
    */
-  public checkLogin(): boolean {
-    if (this.kickstarter.connected && this.indiegogo.connected && this.hardwareclub.connected) {
-      console.log('Routing to home');
-      this.router.navigate(['/home']);
-      console.log('Routing done');
-      return true;
+  public checkLogin(): void {
+    if (this.kickstarter.connected && this.indiegogo.connected) {
+      // this.router.navigate(['']);
+      // console.log(this.router);
     }
-    return false;
   }
 
   /* Logout
@@ -162,28 +118,6 @@ export class LoginComponent implements OnInit {
       // Auto Connect
       if (credentials.kickstarter.autoconnect) {
         this.kickstarterLogin(this.kickstarter.email, this.kickstarter.password);
-      }
-    }
-
-    // Indiegogo
-    if (credentials.indiegogo !== undefined) {
-      this.indiegogo.email = credentials.indiegogo.email;
-      this.indiegogo.password = credentials.indiegogo.password;
-
-      // Auto Connect
-      if (credentials.indiegogo.autoconnect) {
-        this.indiegogoLogin(this.indiegogo.email, this.indiegogo.password);
-      }
-    }
-
-    // HardwareClub
-    if (credentials.hardwareclub !== undefined) {
-      this.hardwareclub.email = credentials.hardwareclub.email;
-      this.hardwareclub.password = credentials.hardwareclub.password;
-
-      // Auto Connect
-      if (credentials.hardwareclub.autoconnect) {
-        this.hardwareclubLogin(this.hardwareclub.email, this.hardwareclub.password);
       }
     }
   }

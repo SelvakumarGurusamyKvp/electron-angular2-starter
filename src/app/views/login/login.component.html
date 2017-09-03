@@ -40,24 +40,4 @@
 	<button (click)="logout('indiegogo')">Logout</button>
 </div>
 
-<div *ngIf="!hardwareclub.connected">
-	<form (ngSubmit)="hardwareclubLogin(hardwareclub.email, hardwareclub.password)" name="hardwareclub">
-
-		<h3>hardwareclub</h3>
-
-		<input [(ngModel)]="hardwareclub.email" placeholder="Email" autofocus name="indie_email">
-		<input [(ngModel)]="hardwareclub.password" placeholder="Password" type= "password" name="indie_password">
-
-		<label for="kick_remember">Remember hardwareclub credentials</label>
-		<input [(ngModel)]="hardwareclub.remember" type= "checkbox" name="kick_remember">
-
-		<input value="Submit Value" type="submit">
-
-	</form>
-</div>
-<div *ngIf="hardwareclub.connected">
-	<h3>Connected to Hardwareclub</h3>
-	<button (click)="logout('hardwareclub')">Logout</button>
-</div>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
