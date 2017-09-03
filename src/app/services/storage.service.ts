@@ -7,27 +7,27 @@ import { FileService } from './files.service';
 @Injectable()
 export class StorageService {
 
-  public dirname = path.resolve(electron.remote.app.getPath('userData') + '/storage/');
+	public dirname = path.resolve(electron.remote.app.getPath('userData') + '/storage/');
 
-  constructor () {
-    let fileService = new FileService();
-    fileService.ensureDirectoryExistence(this.dirname);
-  }
+	constructor () {
+		let fileService = new FileService();
+		fileService.ensureDirectoryExistence(this.dirname);
+	}
 
-  public set(name: string, value: any): boolean {
-    let file = name + '.json';
-    let fullpath = path.join(this.dirname, file);
-    fs.writeFileSync(fullpath, JSON.stringify(value));
-    return true;
-  }
-  public get(name: string): any {
-    let file = name + '.json';
-    let fullpath = path.join(this.dirname, file);
-    if (fs.existsSync(fullpath)) {
-      let res = JSON.parse(fs.readFileSync(fullpath, {encoding: 'utf8'}));
-      return res;
-    }
-    console.log('file not found', fullpath);
-    return null;
-  }
+	public set(name: string, value: any): boolean {
+		let file = name + '.json';
+		let fullpath = path.join(this.dirname, file);
+		fs.writeFileSync(fullpath, JSON.stringify(value));
+		return true;
+	}
+	public get(name: string): any {
+		let file = name + '.json';
+		let fullpath = path.join(this.dirname, file);
+		if (fs.existsSync(fullpath)) {
+			let res = JSON.parse(fs.readFileSync(fullpath, {encoding: 'utf8'}))
+			return res;
+		}
+		console.log('file not found', fullpath);
+		return null;
+	}
 }
